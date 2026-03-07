@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>APEX LEGENDS ACADEMY</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="apple-touch-icon" sizes="180x80" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <style>
+        /* --- Global Apex Style Go To Top Button --- */
+        #backToTop {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            /* Increase Z-INDEX to stay above everything */
+            z-index: 10000;
+
+            /* Force visibility settings */
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+
+            /* Transition and Hidden State */
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(30px);
+
+            clip-path: polygon(20% 0%, 100% 0%, 80% 100%, 0% 100%);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* This class MUST be applied by JS */
+        #backToTop.show {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) !important;
+        }
+
+        #backToTop:hover {
+            background: white;
+            color: #ff0000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+            transform: translateY(-5px);
+        }
+
+        .arrow-up {
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid currentColor;
+        }
+
+        @media (max-width: 768px) {
+            #backToTop {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        #footerModalBody {
+            /* This ensures that \n or actual line breaks in text are rendered */
+            white-space: pre-line;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Remove text decoration from links inside modal content */
+        .modal-content [data-content] a,
+        .modal-body a {
+            text-decoration: none;
+            color: #00d4ff; /* Adjust to match your theme */
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-content [data-content] a:hover,
+        .modal-body a:hover {
+            opacity: 0.8;
+            text-decoration: underline; /* Optional: underline on hover */
+        }
+
+        /* Style for the data source links specifically */
+        .modal-content a[target="_blank"]::after {
+            content: " ↗";
+            font-size: 0.8em;
+            margin-left: 2px;
+        }
+
+        /* Custom backdrop darkness */
+        .modal-backdrop.show {
+            opacity: 0.8; /* Adjust for desired darkness (0.0 to 1.0) */
+            background-color: #000;
+        }
+
+        /* Optional: Prevent scrolling while modal is active */
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        /* New class to force-hide the button when a modal is open */
+        #backToTop.modal-hide {
+            display: none !important;
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+/*
+        .navbar-brand img{
+            height: 35px !important;
+            width: auto !important;
+        }
+*/
+
+        @media (max-width: 768px) {
+                    /* shut down bootstrap avoid reflow */
+            .collapsing {
+                height: auto !important;
+                transition: opacity 0.1s ease !important;
+                opacity: 0;
+            }
+
+            .navbar-collapse.show {
+                opacity: 1;
+                transition: opacity 0.5s ease;
+            }
+
+            .navbar-collapse {
+                /* Absolute Positioning & Frosted Glass effect */
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 10, 0.95) !important;
+                backdrop-filter: blur(8px);
+                
+                /* Force GPU Hardware Acceleration for smoother animation */
+                transform: translateZ(0);
+                backface-visibility: hidden;
+                
+                padding: 20px;
+                z-index: 1050;
+                
+                /* Initially transparent, transitions to 1 when .show class is added */
+                opacity: 0; 
+            }
+        }
+
+        /* Change all nav links to white */
+        .navbar-dark .navbar-nav .nav-link {
+            color: #ffffff !important;
+            opacity: 0.9; /* Optional: adds a slight pro feel */
+            transition: color 0.3s ease;
+        }
+
+        /* Add a hover effect so users know it's clickable */
+        .navbar-dark .navbar-nav .nav-link:hover {
+            color: #ff4b4b !important; /* Apex Red hover looks great */
+            opacity: 1;
+            
+        }
+
+        #musicToggle {
+            transition: all 0.3s ease;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        #musicToggle:hover {
+             /* background: #ff4b4b; *//* Apex Red */ 
+            border-color: #ff4b4b;
+            transform: scale(1.1);
+        }
+
+        /* Animation for when music is playing */
+        .fa-volume-high {
+            animation: pulse-audio 1.5s infinite;
+        }
+
+        @keyframes pulse-audio {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        #musicToggle {
+            position: fixed;
+            right: 30px;
+            bottom: 30px; /* Default position at bottom right */
+            width: 50px;
+            height: 50px;
+            border-radius: 50% !important; /* Circular to match the theme */
+            z-index: 10001; /* Stay slightly above the backToTop button (10000) */
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            border: 2px solid #ff0000;
+            color: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* SHIFT LOGIC: When backToTop has the 'show' class, move the music button up */
+        #backToTop.show ~ #musicToggle {
+            bottom: 90px; /* Base 30px + backToTop height 50px + 10px margin */
+        }
+
+        /* Ensure the button stays hidden when modals are open (consistent with your existing code) */
+        #musicToggle.modal-hide {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            #musicToggle {
+                right: 20px;
+                bottom: 20px;
+                width: 45px;
+                height: 45px;
+            }
+            #backToTop.show ~ #musicToggle {
+                bottom: 75px; /* Adjust for smaller mobile buttons */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark navbar-gradient sticky-top">
+    <div class="container">
+        <a class="navbar-brand logo-rotator" href="/" aria-label="APEX LEGENDS">
+            <img src="assets/images/AL-LOGO.png" alt="Logo" id="navLogo">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/">首頁</a></li>
+                <li class="nav-item"><a class="nav-link" href="/hero">英雄職業</a></li>
+                <li class="nav-item"><a class="nav-link" href="/maps">地圖介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="/weapons">火力介紹</a></li>
+                <li class="nav-item"><a class="nav-link" href="/play">精彩操作</a></li>
+                <li class="nav-item"><a class="nav-link" href="/beginner">新手教學</a></li>
+                <li class="nav-item"><a class="nav-link" href="/faq">支援(FAQ)</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main id="app-root"></main>
+
+<footer>
+    <div class="container">
+        <div class="footer-links">
+            <span class="visitor-counter" style="color: #fff; margin-right: 10px;">
+                <i class="fa-solid fa-users"></i> 瀏覽人數: <span id="count-number">---</span>
+            </span>
+
+            <span class="divider">|</span>
+
+            <a href="javascript:void(0)" class="footer-modal-trigger"
+               data-title="關於我們"
+               data-content="本網站為 聯成電腦<br>AI前端設計實戰應用班 - 專題作品<br>
+               網址：https://paulsjourney.infinityfreeapp.com<br>
+               專題作品組員 <i class='fa-solid fa-people-group'></i><br>
+               • 王學主 Paul<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;minecraft15611@gmail.com<br>
+               • 林詩婷 Claire<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;f0841121@gmail.com<br>
+               • 連聰仁 Bruce<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;brucelainmarylu@gmail.com<br>
+               • 申卓石 Joseph<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;joseph.scs@gmail.com"
+               data-qr="./assets/images/apex_qrcode.png">關於我們</a>
+
+            <span class="divider">|</span>
+
+            <a href="javascript:void(0)" class="footer-modal-trigger"
+               data-title="資料及圖片來源"
+               data-content="
+                <a href='https://apexlegends.wiki.gg/wiki/Weapon#SMGs' target='_blank'>wiki.gg</a>
+                <a href='https://apexlegendsfans.com/guides.html' target='_blank'>APEXLEGENDSFANS</a>
+                <a href ='https://algs.ea.com/en' target='_blank'>APEX LEGENDS GLOBAL SERIES</a>
+                <a href='https://www.rockpapershotgun.com/apex-legends-is-revisiting-the-past-but-it-should-be-prouder-of-its-present' target='_blank'>ROCK PAPER SHOTGUN</a>
+                <a href='https://www.thegamer.com/apex-legends-2/' target='_blank'>THEGAMER</a>
+                <a href='https://4kwallpapers.com/games/apex-legends-video-12712.html#google_vignette' target='_blank'>4K WALLPAPERS</a>"
+               data-qr="">資料來源</a>
+        </div>
+
+        <p class="footer-copy">
+            &copy2026 APEX LEGENDS. All rights reserved.
+        </p>
+    </div>
+</footer>
+
+<div class="modal fade" id="footerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg"> <div class="modal-content bg-dark text-white border-danger" style="border-left: 5px solid #ff0000;">
+        <div class="modal-header border-secondary">
+            <h5 class="modal-title" id="footerModalLabel" style="font-family: 'Orbitron', sans-serif; letter-spacing: 2px;"></h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <!--
+        <div class="modal-body d-md-flex align-items-center gap-4" id="footerModalBodyContainer">
+            <div id="footerModalBody" class="flex-grow-1" style="font-size: 1.1rem; line-height: 1.6;">
+            </div>
+
+            <div id="footerModalQRCode" class="text-center mt-3 mt-md-0" style="min-width: 150px;">
+                <img id="qrCodeImg" src="" alt="QR Code" class="img-fluid border border-light p-1 bg-white" style="width: 150px; height: 150px; display: none;">
+            </div>
+        </div>
+        -->
+        <div class="modal-body d-md-flex align-items-center gap-4" id="footerModalBodyContainer">
+            <div id="footerModalBody" class="flex-grow-1" style="font-size: 1em; line-height: 1.5em; text-align: left;">
+            </div>
+
+            <div id="footerModalQRCode" class="d-flex flex-column align-items-center justify-content-center" style="min-width: 350px;">
+                <img id="qrCodeImg" src="assets/images/apex_qrcode.png" alt="QR Code"
+                     class="img-fluid border border-light p-1 bg-white mt-5"
+                    style="width: 150px; height: 150px; display: block;">
+        </div>
+
+    </div>
+
+        <div class="modal-footer border-top-0">
+            <button type="button" class="btn btn-outline-danger px-4" data-bs-dismiss="modal" style="clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);">關閉</button>
+        </div>
+    </div>
+    </div>
+</div>
+
+<button id="backToTop" title="Back to Top">
+    <div class="arrow-up"></div>
+</button>
+
+<button id="musicToggle" class="btn btn-outline-light btn-sm floating-music-btn" title="Toggle Music">
+    <i class="fa-solid fa-volume-xmark" id="musicIcon"></i>
+</button>
+
+<audio id="bgMusic" loop>
+    <source src="assets/media/Apex Legends_ Main Theme.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/app.js"></script>
+
+</body>
+</html>

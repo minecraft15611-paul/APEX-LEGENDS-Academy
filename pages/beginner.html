@@ -1,0 +1,219 @@
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;700;900&display=swap');
+
+    :root {
+        --neon-blue: #00d4ff;
+        --neon-red: #ff0055;
+        --neon-green: #4ade80;
+        --bg-dark: #05070a;
+        --card-bg: rgba(15, 20, 30, 0.8);
+    }
+
+    .beginner-wrapper {
+        color: #ffffff;
+        font-family: 'Oxanium', sans-serif;
+        padding-top: 2rem;
+        padding-bottom: 5rem;
+    }
+
+    .custom-container {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    /* --- SHINIER TITLE --- */
+    /* --- INFINITE GRADIENT TITLE --- */
+    .apex-title-red {
+        /* Maximum Boldness & Apex Style */
+        font-weight: 900 !important;
+        font-style: italic;
+        text-transform: uppercase;
+        letter-spacing: 8px;
+
+        /* Gradient: Red -> Black -> Red (Repeating for seamless loop) */
+        background: linear-gradient(
+                to right,
+                #BC0000 0%,
+                #000000 50%,
+                #BC0000 100%
+        );
+        background-size: 200% auto;
+
+        /* Clip background to text */
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        /* Infinite Horizontal Loop */
+        animation: gradient-swipe 3s linear infinite;
+
+        /* Soft Glow Filter */
+        filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.4));
+    }
+
+    .apex-title-green {      /* Paul Edit*/
+        /* Maximum Boldness & Apex Style */
+        font-weight: 900 !important;
+        font-style: italic;
+        text-transform: uppercase;
+        letter-spacing: 8px;
+
+        /* Gradient: Green -> Black -> Green (Repeating for seamless loop) */
+        background: linear-gradient(
+                to right,
+                #46B811 0%,
+                #000000 50%,
+                #46B811 100%
+        );
+        background-size: 200% auto;
+
+        /* Clip background to text */
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+
+        /* Infinite Horizontal Loop */
+        animation: gradient-swipe 3s linear infinite;
+
+        /* Soft Glow Filter */
+        filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.4));
+    }
+
+    @keyframes gradient-swipe {
+        0% { background-position: 0% center; }
+        100% { background-position: -200% center; }
+    }
+
+    /* --- ENHANCED HEX CARD --- */
+    .hex-card {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px); /* Glassmorphism */
+        position: relative;
+        clip-path: polygon(8% 0, 92% 0, 100% 25%, 100% 75%, 92% 100%, 8% 100%, 0 75%, 0 25%);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        padding: 1.5rem;
+    }
+
+    /* Shinier Hover Effects */
+    .hex-card:hover {
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        transform: translateY(-3px) scale(1.02);
+    }
+
+    /* Specific Glows for Success/Danger */
+    .glow-green {
+        border: 1px solid var(--neon-green) !important;
+        box-shadow: 0 0 15px rgba(74, 222, 128, 0.2);
+    }
+    .glow-red {
+        border: 1px solid var(--neon-red) !important;
+        box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+    }
+
+    /* --- ANIMATED CONDUIT (Higher Contrast) --- */
+    .conduit-v {
+        position: relative;
+        width: 3px;
+        height: 50px;
+        background: rgba(255, 255, 255, 0.1);
+        margin: 0 auto;
+        overflow: visible; /* Changed to visible for glow */
+    }
+
+    .conduit-v::after {
+        content: '';
+        position: absolute;
+        top: -100%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 10px; /* Wider glow */
+        height: 40px;
+        background: linear-gradient(to bottom, transparent, var(--flow-color, var(--neon-blue)), transparent);
+        filter: blur(2px) brightness(1.5);
+        animation: flow-down 1.2s infinite linear;
+    }
+
+    @keyframes flow-down {
+        0% { top: -100%; opacity: 0; }
+        50% { opacity: 1; }
+        100% { top: 100%; opacity: 0; }
+    }
+
+    /* Tactical Block Design */
+    .tactical-panel {
+        background: linear-gradient(145deg, rgba(20,25,35,1) 0%, rgba(5,7,10,1) 100%);
+        border-radius: 0 0 15px 15px;
+        border-bottom: 2px solid var(--border-color);
+        box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    }
+</style>
+
+<div class="beginner-wrapper container">
+    <div class="custom-container">
+        <header class="text-center mb-5">
+            <h1 class="display-3 apex-title-red">對戰流程</h1>
+            <h1 class="display-3 apex-title-green" style="font-size: 2em;">遭遇敵人</h1>
+            <p class="text-info small mt-2" style="letter-spacing: 0.8em; opacity: 0.8;">
+                <span class="animate-pulse">●</span> TACTICAL ENGAGEMENT PROTOCOL
+            </p>
+        </header>
+
+        <div class="d-flex flex-column align-items-center mb-4">
+            <div class="hex-card text-center" style="width: 280px; border-color: var(--neon-blue);">
+                <span class="d-block small text-info fw-bold mb-1" style="letter-spacing: 2px;">STAGE 01</span>
+                <p class="h5 fw-bold mb-0">🎯 確認位置 / 踩高點</p>
+            </div>
+
+            <div class="conduit-v"></div>
+
+            <div class="hex-card text-center" style="width: 280px; border-color: var(--neon-blue);">
+                <span class="d-block small text-info fw-bold mb-1" style="letter-spacing: 2px;">STAGE 02</span>
+                <p class="h5 fw-bold mb-0">🔭 注意第三方</p>
+            </div>
+
+            <div class="conduit-v" style="height: 60px;"></div>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+
+            <div class="col-md-5 d-flex flex-column align-items-center">
+                <div class="hex-card glow-green w-100 text-success fw-bold text-center">
+                    🛡️ 位置安全
+                </div>
+                <div class="conduit-v" style="--flow-color: var(--neon-green);"></div>
+                <div class="tactical-panel p-4 w-100 text-center" style="--border-color: var(--neon-green);">
+                    <p class="h5 fw-bold text-white mb-3">🔫 往前壓縮敵人槍線</p>
+                    <div class="d-flex justify-content-around small">
+                        <span class="badge border border-success text-success p-2">💣 丟手雷</span>
+                        <span class="badge border border-success text-success p-2">🎯 側面射擊</span>
+                    </div>
+                </div>
+                <div class="conduit-v" style="--flow-color: var(--neon-green);"></div>
+                <div class="hex-card glow-green w-100 text-success fw-bold text-center bg-success bg-opacity-10 animate-pulse">
+                    🚩 優勢 &rarr; ⏩ 推進
+                </div>
+            </div>
+
+            <div class="col-md-1 d-none d-md-flex align-items-center justify-content-center">
+                <div class="h4 text-secondary opacity-25">OR</div>
+            </div>
+
+            <div class="col-md-5 d-flex flex-column align-items-center">
+                <div class="hex-card glow-red w-100 text-danger fw-bold text-center">
+                    💔 位置不安全
+                </div>
+                <div class="conduit-v" style="--flow-color: var(--neon-red);"></div>
+                <div class="tactical-panel p-4 w-100 text-center" style="--border-color: var(--neon-red);">
+                    <p class="h5 fw-bold text-danger mb-2">👥 往隊友靠近</p>
+                    <p class="small text-secondary fst-italic">KEEP FORMATION - COVER FIRE</p>
+                </div>
+                <div class="conduit-v" style="--flow-color: var(--neon-red);"></div>
+                <div class="hex-card glow-red w-100 text-danger fw-bold text-center bg-danger bg-opacity-10">
+                    🚩 劣勢 &rarr; 🏰 固守 / ↩️ 後撤
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

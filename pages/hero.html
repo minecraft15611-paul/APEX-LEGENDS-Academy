@@ -1,0 +1,174 @@
+<style>
+    :root {
+        --apex-red: #ff0000;
+        --apex-dark-red: #b30000;
+        --apex-dark-grey: #1a1a1a;
+        --apex-light-grey: #333;
+    }
+
+    .hero-page-scope {
+        background: #000;
+        color: #fff;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        font-family: 'Orbitron', sans-serif;
+    }
+
+    /* --- ROLE SELECTOR (Mobile Friendly Swiping) --- */
+    .role-selector-bar {
+        display: flex;
+        justify-content: flex-start;
+        background: linear-gradient(180deg, #111 0%, #000 100%);
+        border-bottom: 3px solid var(--apex-light-grey);
+        padding: 15px 10px;
+        gap: 8px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        overflow-x: auto;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none; /* Firefox */
+    }
+    .role-selector-bar::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+    @media (min-width: 992px) {
+        .role-selector-bar { justify-content: center; }
+    }
+
+    .role-item {
+        background: #222;
+        border: none;
+        color: #888;
+        padding: 10px 30px;
+        font-weight: 800;
+        font-size: 0.95rem;
+        cursor: pointer;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        flex-shrink: 0;
+        clip-path: polygon(12% 0%, 100% 0%, 88% 100%, 0% 100%);
+        transition: all 0.2s ease;
+    }
+
+    .role-item.active {
+        background: var(--apex-red);
+        color: #fff;
+        box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+        border-top: 3px solid #fff;
+    }
+
+    /* --- DOSSIER CONTAINER --- */
+    .dossier-center-stage {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        gap: 40px;
+        background: radial-gradient(circle at center, #111 0%, #000 100%);
+    }
+
+    /* --- RESPONSIVE SQUARE DIV --- */
+    .hero-display-square {
+        display: flex;
+        flex-direction: column; /* Stack on Mobile */
+        width: 100%;
+        max-width: 800px;
+        border: 2px solid var(--apex-light-grey);
+        background: #000;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 1);
+        animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    /* Desktop Grid: 2x2 Square */
+    @media (min-width: 768px) {
+        .hero-display-square {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            aspect-ratio: 1 / 1;
+        }
+    }
+
+    .quadrant { border: 1px solid #111; overflow: hidden; }
+
+    /* LT: Hero Image */
+    .lt-image {
+        order: 2;
+        height: 300px;
+        background: #080808;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .lt-image img { width: 100%; height: 100%; object-fit: contain; }
+
+    /* RT: YouTube Video */
+    .rt-video { order: 1; height: 200px; border-bottom: 2px solid var(--apex-red); }
+    @media (min-width: 768px) {
+        .rt-video { height: auto; border-bottom: none; }
+        .lt-image { height: auto; }
+    }
+    .rt-video iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* LB: Hero Name (Red Gradient) */
+    .lb-name {
+        order: 3;
+        background: linear-gradient(180deg, #ff2a2a 0%, #b30000 100%);
+        color: #000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+        box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+    .lb-name h2 {
+        font-size: clamp(1.8rem, 8vw, 3rem);
+        font-weight: 900;
+        text-transform: uppercase;
+        margin: 0;
+        line-height: 1;
+    }
+    .lb-name p {
+        margin: 5px 0 0 0;
+        font-size: 0.9rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+        opacity: 0.8;
+    }
+
+    /* RB: Ability Details */
+    .rb-details {
+        order: 4;
+        background: #0a0a0a;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .ability-item { margin-bottom: 12px; border-left: 4px solid var(--apex-red); padding-left: 15px; }
+    .ability-label { font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 1px; }
+    .ability-name { font-size: 1.1rem; color: #fff; margin: 0; font-weight: bold; }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+<div class="hero-page-scope">
+    <div class="role-selector-bar">
+        <button class="role-item active" data-role="assault">突擊</button>
+        <button class="role-item" data-role="skirmisher">散兵</button>
+        <button class="role-item" data-role="recon">偵查</button>
+        <button class="role-item" data-role="controller">控制</button>
+        <button class="role-item" data-role="support">支援</button>
+    </div>
+
+    <div id="dossierListContainer" class="dossier-center-stage">
+    </div>
+</div>

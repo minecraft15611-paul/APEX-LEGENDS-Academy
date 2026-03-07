@@ -1,0 +1,343 @@
+<div class="hud-wrapper">
+    <audio id="typeSound" preload="auto" crossorigin="anonymous">
+        <source src="https://www.soundjay.com/communication/typewriter-key-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="flash"></div>
+    <div id="view-abc" class="ground-view"></div>
+
+    <div id="caption-container">
+        <div class="d-flex flex-column align-items-center">
+            <div id="caption-text"></div>
+            <button id="terminate-slideshow" class="btn btn-outline-danger btn-sm mt-3" style="letter-spacing: 2px; border-radius: 0;">
+                TERMINATE_LINK [X]
+            </button>
+        </div>
+    </div>
+
+    <div id="district-directory">
+        <div class="directory-header">MAPS_INDEX</div>
+        <ul id="district-list">
+            <li class="district-item" data-id="sector_01">Broken Moon</li>
+            <li class="district-item" data-id="sector_02">E-District</li>
+            <li class="district-item" data-id="sector_03">King's Canyon</li>
+            <li class="district-item" data-id="sector_04">Olympus</li>
+            <li class="district-item" data-id="sector_05">Storm Point</li>
+            <li class="district-item" data-id="sector_06">World's Edge</li>
+        </ul>
+    </div>
+
+    <div id="main-container">
+        <!--
+        <div id="data-feed">ATMOSPHERE_STABLE // SECTOR_COUNT: 06</div>
+        -->
+        <div id="data-feed"></div>
+        <div class="ui-frame" id="planetFrame">
+            <div id="button-layer"></div>
+            <canvas id="starCanvas"></canvas>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ========================================== */
+    /* NEW STYLES FOR THE DISTRICT LIST           */
+    /* ========================================== */
+    #district-directory {
+        position: absolute;
+        left: 20px;
+        top: 20px;
+        z-index: 60;
+        border-left: 2px solid rgba(0, 255, 102, 0.5);
+        padding-left: 15px;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .directory-header {
+        color: #00FF66;
+        font-size: 10px;
+        letter-spacing: 3px;
+        margin-bottom: 10px;
+        opacity: 0.7;
+    }
+
+    #district-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .district-item {
+        color: #00FF66;
+        font-size: 13px;
+        letter-spacing: 2px;
+        padding: 8px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        position: relative;
+        touch-action: manipulation; /* Fixes mobile tap delay */
+    }
+
+    .district-item:hover {
+        color: #fff;
+        padding-left: 10px;
+        text-shadow: 0 0 8px #00FF66;
+    }
+
+    .district-item::before {
+        content: "> ";
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+
+    .district-item:hover::before {
+        opacity: 1;
+    }
+
+    /* Hide directory when slideshow is active */
+    .active-view ~ #district-directory {
+        display: none;
+    }
+    /* ========================================== */
+
+    /* Scope styles to .hud-wrapper to avoid polluting global SPA styles */
+    .hud-wrapper {
+        height: 80vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: #000;
+        position: relative;
+    }
+    #main-container { position: relative; width: 90vw; max-width: 600px; aspect-ratio: 1/1; }
+    .ui-frame { width: 100%; height: 100%; position: relative; filter: brightness(1.2) contrast(1.1); }
+    #starCanvas { display: block; border-radius: 50%; width: 100%; height: 100%; background: #000d07; box-shadow: inset 0 0 80px rgba(0, 255, 102, 0.3); border: 2px solid rgba(0, 255, 102, 0.3); }
+    #data-feed { position: absolute; bottom: -60px; left: 0; width: 100%; text-align: center; font-size: 11px; color: #00FF66; letter-spacing: 2px; }
+    .target-btn { position: absolute; width: 80px; height: 80px; background: transparent; border: none; border-radius: 50%; cursor: pointer; pointer-events: auto; transform: translate(-50%, -50%); z-index: 50; }
+    /*
+    .ground-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1000;
+        transition: opacity 1.5s ease;
+        background-size: cover;
+        background-position: center; }
+    */
+
+    .ground-view {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        z-index: 1000;
+        transition: opacity 1.5s ease;
+
+        /* Changed from 'cover' to 'contain' to prevent cropping */
+        background-size: contain;
+
+        /* Centers the image within the viewport */
+        background-position: center;
+
+        /* Prevents the image from tiling if it is smaller than the screen */
+        background-repeat: no-repeat;
+
+        /* Optional: ensures a clean black backdrop for images that don't fill the width/height */
+        background-color: #000;
+    }
+
+    #caption-container { position: fixed; bottom: 0; left: 0; width: 100%; height: 120px; background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center; z-index: 3000; opacity: 0; visibility: hidden; border-top: 2px solid #FFD700; }
+    #caption-text { color: #FFD700; font-size: 20px; font-weight: bold; letter-spacing: 4px; }
+    .caption-active, .active-view { opacity: 1 !important; visibility: visible !important; }
+    #flash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; opacity: 0; pointer-events: none; z-index: 4000; transition: opacity 0.5s ease; }
+    .auto-zooming { transition: all 2.5s cubic-bezier(0.7, 0, 0.3, 1) !important; transform: scale(60) !important; opacity: 0; }
+
+    /* [SCROLL DOWN TO THE BOTTOM OF YOUR STYLE TAG] */
+
+    /* ========================================== */
+    /* RWD / MOBILE OPTIMIZATION                  */
+    /* ========================================== */
+    @media (max-width: 768px) {
+        .hud-wrapper {
+            height: 100vh; /* Fill screen on mobile */
+            flex-direction: column; /* Stack vertically if needed */
+        }
+
+        /* 1. Adjust the Main Map Container */
+        #main-container {
+            width: 85vw; /* Slightly smaller to prevent edge touching */
+            max-width: 400px;
+            margin-top: -40px; /* Offset for the directory */
+        }
+
+        /* 2. Reposition Directory for Thumb-Reachability */
+        #district-directory {
+            left: 0;
+            top: auto;
+            bottom: 80px; /* Above the data-feed */
+            width: 100%;
+            border-left: none;
+            border-top: 1px solid rgba(0, 255, 102, 0.3);
+            padding: 10px 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 3. Make the list a horizontal scroll or tight grid */
+        #district-list {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            width: 90%;
+            gap: 15px;
+            padding: 5px 10px;
+            /* Hide scrollbar but keep functionality */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        #district-list::-webkit-scrollbar { display: none; }
+
+        .district-item {
+            font-size: 11px; /* Smaller text for mobile */
+            white-space: nowrap; /* Prevent wrapping */
+            padding: 10px 5px;
+            border-bottom: 1px solid rgba(0, 255, 102, 0.2);
+        }
+
+        .district-item::before {
+            content: "[ "; /* Brackets look more 'HUD' on mobile */
+            opacity: 0.5;
+        }
+
+        /* 4. Adjust Captions for smaller screens */
+        #caption-text {
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-align: center;
+            padding: 0 10px;
+        }
+
+        #data-feed {
+            bottom: 20px;
+            font-size: 9px;
+        }
+    }
+
+    /* Handle very small phones or landscape mode */
+    @media (max-height: 500px) and (orientation: landscape) {
+        #district-directory {
+            display: none; /* Hide directory in landscape mobile to save room for the map */
+        }
+        #main-container {
+            width: 50vh;
+        }
+    }
+
+    /* ========================================== */
+    /* RWD / MOBILE OPTIMIZATION                  */
+    /* ========================================== */
+    @media (max-width: 768px) {
+        .hud-wrapper {
+            height: 100vh;
+            /* Use flex-column to stack the list and radar vertically */
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start; /* Start from top */
+            padding-top: 20px;
+        }
+
+        /* 1. The Radar Container */
+        #main-container {
+            width: 80vw;
+            max-width: 350px;
+            aspect-ratio: 1/1;
+            margin: 0 auto; /* Center horizontally */
+            position: relative;
+            order: 1; /* Keep radar at the top */
+        }
+
+        /* 2. Shift Directory DOWNWARDS below the radar */
+        #district-directory {
+            position: relative; /* Change from absolute to relative */
+            left: 0;
+            top: 80px;         /* Add gap below the radar */
+            margin: 0 auto;
+            width: 90%;
+            z-index: 60;
+            border-left: none;
+            border-top: 1px solid rgba(0, 255, 102, 0.3);
+            padding: 15px 0;
+            background: transparent;
+            order: 2; /* Place below radar */
+        }
+
+        .directory-header {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 12px;
+            opacity: 0.9;
+        }
+
+        /* 3. Optimized List for Mobile Tapping */
+        #district-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Two columns to save vertical space */
+            gap: 10px;
+            padding: 0 10px;
+        }
+
+        .district-item {
+            font-size: 11px;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            padding: 10px 5px;
+            background: rgba(0, 255, 102, 0.05);
+        }
+
+        .district-item::before {
+            content: ""; /* Remove ">" to save space on grid */
+        }
+
+        /* 4. Adjust Data Feed */
+        #data-feed {
+            position: relative;
+            bottom: auto;
+            margin-top: 30px;
+            order: 3;
+        }
+    }
+
+    @media (max-width: 768px) {
+        #main-container {
+            width: 80vw;
+            max-width: 350px;
+            /* Ensure height exactly matches width for the 1:1 ratio */
+            height: 80vw;
+            max-height: 350px;
+            aspect-ratio: 1/1;
+            margin: 0 auto;
+            position: relative;
+            order: 1;
+        }
+
+        #starCanvas {
+            /* Force the canvas to fill the square container exactly */
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+        }
+    }
+</style>

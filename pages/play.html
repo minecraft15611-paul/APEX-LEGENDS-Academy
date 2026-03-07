@@ -1,0 +1,212 @@
+<div class="container mt-5">
+    <div class="text-center p-4 bg-dark rounded-3 border border-warning shadow tactical-header">
+        <h2 id="detailTitle" class="text-warning fw-bold">精彩操作</h2>
+        <p class="text-secondary mb-0">Apex Legends Highlights & Clips</p>
+    </div>
+</div>
+
+<div class="container my-4">
+    <div id="videoRow" class="row g-4"></div>
+    <div id="loader">載入影片中...</div>
+</div>
+
+
+
+<style>
+    .tactical-header {
+        background: linear-gradient(145deg, #2b2b2b, #111) !important;
+    }
+
+    /* Video Box Styling */
+    .video-box {
+        position: relative;
+        background: #000;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        transition: transform 0.3s ease;
+    }
+
+    .video-box:hover {
+        transform: translateY(-5px);
+    }
+
+    .video-ratio {
+        aspect-ratio: 16/9;
+        position: relative;
+    }
+
+    .video-thumb {
+        position: absolute;
+        inset: 0;
+        background-size: cover;
+        background-position: center;
+        opacity: 0.4; /* !!! Background video !!! */
+        transition: opacity 0.3s ease;
+    }
+
+    /* THE TITLE (The part you were looking for) */
+    .video-caption {
+        margin-top: 15px;
+        color: #FFD700; /* Apex Gold */
+        font-weight: 700;
+        font-size: 1rem;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        /* Ensure it's visible on dark backgrounds */
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+    }
+
+    /* Play Button Visuals */
+    .play-btn {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+    }
+
+    .play-btn::before {
+        content: "";
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: rgba(0, 0, 0, 0.7);
+        border: 2px solid #FFD700;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .play-btn::after {
+        content: "";
+        width: 0; height: 0;
+        border-style: solid;
+        border-width: 10px 0 10px 18px;
+        border-color: transparent transparent transparent #FFD700;
+        margin-left: 5px;
+        position: relative;
+    }
+
+    .video-box:hover .play-btn::before {
+        background: #FFD700;
+        transform: scale(1.1);
+    }
+
+    .video-box:hover .play-btn::after {
+        border-left-color: #000;
+    }
+
+    /* Remove preview elements when playing */
+    .video-box.playing .play-btn,
+    .video-box.playing .video-thumb {
+        display: none;
+    }
+
+    .video-box iframe {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        border: 0;
+    }
+
+    #loader {
+        padding: 50px;
+        text-align: center;
+        color: #FFD700;
+    }
+</style>
+
+<script>
+    (function() {
+        // Your Data Source
+        const videoData = [
+            { id: "uMV97qcJCDM", title: "My Best Apex Game Of Season 26..." },
+            { id: "6fQHDAr1jlA", title: "*NEW* Bloodhound BUFF has BROKEN Scan Abilities in Apex Legends" },
+            { id: "eo_lquBk9q8", title: "BEST OF 2025 - APEX LEGENDS" },
+            { id: "9Tg0GMFSnMI", title: "The Best Legend Of All Time" },
+            { id: "QByHI6eDVFU", title: "キーマウプレデターのキル集 [Apex Legends]" },
+            { id: "dh4H-yQrLg0", title: "The Top 100 PREDATOR RANK Meta.. (Apex Legends)" },
+            { id: "aA6MmyGO_1k", title: "Apex Legends Season 27 RANKED 🔴 Live Apex Predator GRIND" },
+            { id: "-BJhQ12S1GM", title: "I'm The Reason Gibby Won't Get Buffed..." },
+            { id: "O_GKTlJrOQU", title: "I RAN DOUBLE SHOTGUN FOR 100 HOURS... HERE'S WHAT HAPPENED..." },
+            { id: "_SFUg6hqD2E", title: "久しぶりのキル集 [Apex Legends]" },
+            { id: "A8avTr-7qyA", title: "キーマウプレデターのR99最強キル集【APEX LEGENDS】" },
+            { id: "iiEUQT6l4zc", title: "ジブラルタルの『無限ドーム』がただのチートだった件【APEX LEGENDS】" }
+        ];
+
+        let currentIndex = 0;
+        let loading = false;
+        let activePlayer = null;
+
+        const grid = document.getElementById("videoRow");
+        const loader = document.getElementById("loader");
+        const batchSize = 6;
+
+        const renderVideos = () => {
+            if (loading || currentIndex >= videoData.length) return;
+            loading = true;
+
+            const fragment = document.createDocumentFragment();
+
+            for (let i = 0; i < batchSize && currentIndex < videoData.length; i++) {
+                const video = videoData[currentIndex];
+                const col = document.createElement("div");
+                col.className = "col-12 col-md-6 col-lg-4 mb-5";
+
+                // We inject the title here using the video.title from your array
+                col.innerHTML = `
+                    <div class="video-box video-ratio" data-id="${video.id}">
+                        <div class="video-thumb" style="background-image: url(https://img.youtube.com/vi/${video.id}/hqdefault.jpg)"></div>
+                        <div class="play-btn"></div>
+                    </div>
+                    <div class="video-caption">${video.title}</div>
+                `;
+
+                const box = col.querySelector('.video-box');
+
+                box.addEventListener("click", function() {
+                    if (this.classList.contains("playing")) return;
+
+                    // Stop previous video if one is playing
+                    if (activePlayer && activePlayer !== this) {
+                        const oldIframe = activePlayer.querySelector('iframe');
+                        if(oldIframe) oldIframe.remove();
+                        activePlayer.classList.remove("playing");
+                    }
+
+                    activePlayer = this;
+                    this.classList.add("playing");
+
+                    const iframe = document.createElement("iframe");
+                    iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1`;
+                    iframe.allow = "autoplay; encrypted-media; fullscreen";
+                    this.appendChild(iframe);
+                });
+
+                fragment.appendChild(col);
+                currentIndex++;
+            }
+
+            grid.appendChild(fragment);
+            loading = false;
+
+            if (currentIndex >= videoData.length) {
+                observer.disconnect();
+                loader.innerHTML = "END OF TRANSMISSION";
+            }
+        };
+
+        // Infinite Scroll Logic
+        const observer = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting) renderVideos();
+        }, { rootMargin: "100px" });
+
+        observer.observe(loader);
+
+        // Initial render
+        renderVideos();
+    })();
+</script>

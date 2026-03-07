@@ -1,0 +1,35 @@
+#################################
+#   SPA Architecture Tree Map   #
+#################################
+
+apex/
+│
+├── index.html          # Main Entry Point
+├── pages/              # HTML snippets for each "view"
+│   ├── home.html0
+│   ├── hero.html
+│   ├── maps.html
+│   ├── weapons.html
+│   ├── play.html
+│   ├── beginner.html
+│   └── faq.html
+└── assets/
+    ├── css/
+    │   ├── bootstrap.min.css
+    │   └── style.css   # Combined global styles
+    ├── js/
+    │   ├── app.js      # SPA Router and Logic
+    │   └── bootstrap.bundle.min.js
+    ├── media/
+    │   └── mp3 file
+    └── images/
+        ├── hero/
+        │   └── image files
+        ├── home/
+        │   └── carrousel image files
+        ├── maps/
+        │    └── image files
+        ├── weapons/
+        │    └── image files
+        ├── LOGO image file
+        └── QRCode image file

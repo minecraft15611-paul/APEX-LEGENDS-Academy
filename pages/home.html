@@ -1,0 +1,262 @@
+<!-- ================= CAROUSEL ================= -->
+<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+
+    <div class="carousel-inner my-3">
+        <div class="carousel-item active">
+            <a href="/hero">
+                <img src="../assets/images/home/legends.webp" alt="View Heroes" class="d-block w-100">
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a href="/maps">
+                <img src="../assets/images/home/maps.webp" alt="View Maps" class="d-block w-100">
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a href="/weapons">
+                <img src="../assets/images/home/weapons.webp" alt="View Weapons" class="d-block w-100">
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a href="/play">
+                <img src="../assets/images/home/highlights%20moment.webp" alt="View Play" class="d-block w-100">
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a href="/beginner">
+                <img src="../assets/images/home/beginner.webp" alt="View Beginner" class="d-block w-100">
+            </a>
+        </div>
+        <div class="carousel-item">
+            <a href="/faq">
+                <img src="../assets/images/home/index.webp" alt="View FAQ" class="d-block w-100">
+            </a>
+        </div>
+    </div>
+
+    <!-- arrows -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+</div>
+
+<!-- ================= INDICATORS OUTSIDE AND CENTERED ================= -->
+<div class="carousel-indicators-outside">
+    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
+    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
+    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
+    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="3"></button>
+    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="4"></button>
+    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="5"></button>
+</div>
+
+<!-- ================= ARTICLES ================= -->
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="article-card apex-border h-100">
+                <div class="card-accent"></div>
+                <div class="card-content">
+                    <h5 class="apex-title">
+                        <i class="fa-solid fa-shuttle-space me-2"></i>
+                        Apex Legends 遊戲介紹
+                    </h5>
+                    <p>
+                        Apex Legends 是由 Respawn Entertainment 開發的免費大逃殺射擊遊戲，結合高速移動、英雄技能與團隊合作。每位傳奇角色都擁有獨特能力，讓戰術與操作產生無限可能。
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="article-card apex-border h-100">
+                <div class="card-accent"></div>
+                <div class="card-content">
+                    <h5 class="apex-title">
+                        <i class="fa-solid fa-users-rays me-2"></i>
+                        傳奇角色系統
+                    </h5>
+                    <p>
+                        Apex Legends 擁有多名傳奇角色，如 Wraith、Octane、Lifeline 等，每位角色分屬不同定位（突擊、防守、支援、偵察），技能搭配影響整場戰局，強調團隊配合與策略選擇。
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="article-card apex-border h-100">
+                <div class="card-accent"></div>
+                <div class="card-content">
+                    <h5 class="apex-title">
+                        <i class="fa-solid fa-code-branch me-2"></i>
+                        網站建置說明
+                    </h5>
+                    <p>
+                        本 SPA 網站為課程專題作品，使用 HTML5、CSS3、JavaScript、Bootstrap 與 Chart.js 製作，網站所需相關特效素材藉由 Gemini、ChatGPT、Claud 等 AI 協助生成，整體風格以 Apex Legends 的未來科技感為核心。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* ================= CAROUSEL RATIO ================= */
+    .carousel-item {
+        aspect-ratio: 4 / 3;
+        background: #000;
+    }
+
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover; /* no distortion */
+    }
+
+    /* ================= INDICATORS OUTSIDE ================= */
+    .carousel-indicators-outside {
+        display: flex;
+        justify-content: center;
+        margin: 12px 0 32px 0; /* below carousel */
+        padding: 0;
+    }
+
+    .carousel-indicators-outside button {
+        width: 18px;
+        height: 18px;
+        background: none;
+        border: none;
+        margin: 0 6px;
+        position: relative;
+        opacity: 1;
+    }
+
+    /* Inactive bullet */
+    .carousel-indicators-outside button::before {
+        content: '\f111'; /* Font Awesome circle */
+        font-family: "Font Awesome 6 Free";
+        font-weight: 400;  /* Must match the Regular font file */
+        font-size: 16px;
+        color: #999999;
+    }
+
+    /* Active bullet */
+    .carousel-indicators-outside button.active::before {
+        content: '\f05b';  /* fa-crosshairs */
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;  /* Must match the Solid font file */
+        font-style: normal;
+        font-size: 16px;
+        color: #FF0000;
+
+    }
+
+    /* Mobile fine-tune */
+    @media (max-width: 768px) {
+        .carousel-indicators-outside button::before {
+            font-size: 14px;
+        }
+        .carousel-indicators-outside button.active::before {
+            font-size: 18px;
+        }
+    }
+
+    /* ================= DESKTOP CAROUSEL SIZE ================= */
+    @media (min-width: 992px) {
+        #mainCarousel {
+            max-width: 800px;   /* adjust: 800 / 900 / 1000px if you want */
+            margin: 0 auto;     /* center horizontally */
+        }
+    }
+
+    /* ================= ARTICLES ================= */
+    .apex-title i {
+        color: #FF0000; /* Matches your active indicators  */
+        text-shadow: 0 0 5px rgba(255, 0, 0, 0.5); /* Adds a subtle glow */
+    }
+
+    .article-card {
+        position: relative;
+        background: #1a1a1a; /* Deep dark background [cite: 10] */
+        color: #ffffff;
+        padding: 2px; /* Border thickness */
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%); /* The "Cut corner" look */
+        border: 1px solid #333;
+    }
+
+    .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(255, 0, 0, 0.2);  /* this snippet has been blocked by clip-path */
+    }
+
+    .col-md-4{
+        transition: filter 0.5s ease;   /* breathing effect make up */
+    }
+
+    .col-md-4:hover{
+        filter: drop-shadow(0 0 15px #921000);  
+    }
+
+    /* Red "Strike" Accent on the side */
+    .card-accent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 40px;
+        background: #FF0000; /* Apex Red  */
+        box-shadow: 0 0 10px #FF0000;
+    }
+
+    .card-content {
+        background: #242424;
+        padding: 25px;
+        height: 100%;
+    }
+
+    .apex-title {
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 2px solid #FF0000;
+        display: inline-block;
+        margin-bottom: 15px;
+        color: #ffffff;
+    }
+
+    .article-card p {
+        font-size: 0.95rem;
+        line-height: 1.6;
+        color: #cccccc; /* Slightly dimmed for readability */
+    }
+
+    /* Adding a subtle background texture/gradient */
+    .article-card::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+        pointer-events: none;
+    }
+</style>
+
+<script>
+    const carousel = document.querySelector('#mainCarousel');
+    const indicators = document.querySelectorAll('.carousel-indicators-outside button');
+
+    // When the carousel slides, update active indicator
+    carousel.addEventListener('slide.bs.carousel', function (event) {
+        indicators.forEach(btn => btn.classList.remove('active'));
+        indicators[event.to].classList.add('active');
+    });
+
+    // When user clicks external indicator, move carousel
+    indicators.forEach((btn, index) => {
+        btn.addEventListener('click', () => {
+            const carouselInstance = bootstrap.Carousel.getInstance(carousel);
+            carouselInstance.to(index);
+        });
+    });
+</script>
