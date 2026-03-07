@@ -1,6 +1,8 @@
 
 const base = "";
 
+    //test vue
+
 // Global instances for animation control
 let myRadarChart = null;      // WEAPONS PAGE LOGIC
 let typewriterTimeout = null; // Typewriter Effect
