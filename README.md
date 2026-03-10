@@ -3,10 +3,6 @@
 這是一個以知名遊戲《Apex Legends (英雄聯盟)》為主題開發的單頁式應用程式 (SPA)。
 本專案旨在練習原生 JavaScript (Vanilla JS) 的 DOM 操作、非同步資料處理以及響應式網頁設計。
 
-## 🚀 專案連結
-- **GitHub Repository**: [點此訪問](https://github.com/minecraft15611-paul/APEX-LEGENDS-Academy)
-- **Live Demo**: [在此填入你的部署網址，例如 Vercel 或 GitHub Pages]
-
 ## 🛠 使用技術
 - **前端開發**: 
   - 原生 JavaScript (ES6+) - 核心邏輯處理
